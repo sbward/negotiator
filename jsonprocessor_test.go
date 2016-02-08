@@ -37,7 +37,7 @@ func TestShouldSetContentTypeHeader(t *testing.T) {
 
 	jsonProcessor := &jsonProcessor{}
 
-	jsonProcessor.Process(recorder, model)
+	jsonProcessor.Process(recorder, nil, model)
 
 	assert.Equal(t, "application/json", recorder.HeaderMap.Get("Content-Type"))
 }
@@ -53,7 +53,7 @@ func TestShouldSetResponseBody(t *testing.T) {
 
 	jsonProcessor := &jsonProcessor{}
 
-	jsonProcessor.Process(recorder, model)
+	jsonProcessor.Process(recorder, nil, model)
 
 	assert.Equal(t, "{\"Name\":\"Joe Bloggs\"}", recorder.Body.String())
 }
@@ -67,7 +67,7 @@ func TestShouldReturnErrorOnJsonError(t *testing.T) {
 
 	jsonProcessor := &jsonProcessor{}
 
-	err := jsonProcessor.Process(recorder, model)
+	err := jsonProcessor.Process(recorder, nil, model)
 
 	assert.Error(t, err)
 }
@@ -80,7 +80,7 @@ func (u *User) MarshalJSON() ([]byte, error) {
 	return nil, errors.New("oops")
 }
 
-func jsontestErrorHandler(w http.ResponseWriter, err error) {
+func jsontestErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
 	w.WriteHeader(500)
 	w.Write([]byte(err.Error()))
 }

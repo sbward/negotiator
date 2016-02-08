@@ -15,7 +15,7 @@ func (*PlainTextResponseProcessor) CanProcess(mediaRange string) bool {
 	return strings.EqualFold(mediaRange, "text/plain")
 }
 
-func (*PlainTextResponseProcessor) Process(w http.ResponseWriter, model interface{}) error {
+func (*PlainTextResponseProcessor) Process(w http.ResponseWriter, r *http.Request, model interface{}) error {
 
 	if currTime := time.Now(); currTime.Second()%2 == 0 {
 		err := errors.New("This is a sample error showcasing how to use a error handler with negotiator")

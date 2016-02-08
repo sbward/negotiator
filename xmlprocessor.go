@@ -13,7 +13,7 @@ func (*xmlProcessor) CanProcess(mediaRange string) bool {
 	return strings.HasSuffix(mediaRange, "xml")
 }
 
-func (*xmlProcessor) Process(w http.ResponseWriter, model interface{}) error {
+func (*xmlProcessor) Process(w http.ResponseWriter, r *http.Request, model interface{}) error {
 	x, err := xml.MarshalIndent(model, "", "  ")
 	if err != nil {
 		return err

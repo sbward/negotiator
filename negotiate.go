@@ -47,7 +47,7 @@ func negotiateHeader(processors []ResponseProcessor, w http.ResponseWriter, req 
 	// A request without any Accept header field implies that the user agent
 	// will accept any media type in response.
 	if accept.Header == "" {
-		return processors[0].Process(w, model)
+		return processors[0].Process(w, req, model)
 	}
 
 	for _, mr := range accept.ParseMediaRanges() {
@@ -56,12 +56,12 @@ func negotiateHeader(processors []ResponseProcessor, w http.ResponseWriter, req 
 		}
 
 		if strings.EqualFold(mr.Value, "*/*") {
-			return processors[0].Process(w, model)
+			return processors[0].Process(w, req, model)
 		}
 
 		for _, processor := range processors {
 			if processor.CanProcess(mr.Value) {
-				return processor.Process(w, model)
+				return processor.Process(w, req, model)
 			}
 		}
 	}

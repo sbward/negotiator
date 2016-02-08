@@ -34,7 +34,7 @@ func TestShouldSetXmlContentTypeHeader(t *testing.T) {
 
 	xmlProcessor := &xmlProcessor{}
 
-	xmlProcessor.Process(recorder, model)
+	xmlProcessor.Process(recorder, nil, model)
 
 	assert.Equal(t, "application/xml", recorder.HeaderMap.Get("Content-Type"))
 }
@@ -48,7 +48,7 @@ func TestShouldSetXmlResponseBody(t *testing.T) {
 
 	xmlProcessor := &xmlProcessor{}
 
-	xmlProcessor.Process(recorder, model)
+	xmlProcessor.Process(recorder, nil, model)
 
 	assert.Equal(t, "<ValidXMLUser>\n  <Name>Joe Bloggs</Name>\n</ValidXMLUser>", recorder.Body.String())
 }
@@ -62,7 +62,7 @@ func TestShouldReturnErrorOnXmlError(t *testing.T) {
 
 	xmlProcessor := &xmlProcessor{}
 
-	err := xmlProcessor.Process(recorder, model)
+	err := xmlProcessor.Process(recorder, nil, model)
 
 	assert.Error(t, err)
 }
@@ -79,7 +79,7 @@ func (u *XMLUser) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return errors.New("oops")
 }
 
-func xmltestErrorHandler(w http.ResponseWriter, err error) {
+func xmltestErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
 	w.WriteHeader(500)
 	w.Write([]byte(err.Error()))
 }
